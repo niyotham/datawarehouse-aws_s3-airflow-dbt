@@ -98,7 +98,7 @@ DBT docs
 
 # Authors
 
-- [@Nathnael12](https://www.github.com/niyotham)
+- [niyotham](https://www.github.com/niyotham)
 
 
 ## Contributing
