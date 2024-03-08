@@ -1,6 +1,6 @@
 # datawarehouse-aws_s3-airflow-dbt
 use the Extract Load Transform (ELT) framework using DBT. Unlike the Extract, Transform, Load (ETL), the ELT framework helps analytic engineers in the city traffic department setup transformation workflows on a need basis.
-#system design
+# System design
 ![]
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Documentation](https://img.shields.io/badge/doc-generated%20by%20dbt%20docs-yellow)](https://data-engineering-dwh.netlify.app/#!/overview)
