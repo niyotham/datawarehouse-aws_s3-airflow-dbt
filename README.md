@@ -26,7 +26,7 @@ ___
 > To deploy this project <br>`docker and docker-compose are required`
 
 ```bash
-  git clone https://github.com/Nathnael12/DataEngineering_Datawarehouse_airflow.git
+  git clone https://github.com/.....
   cd DataEngineering_Datawarehouse_airflow
   pip install -r requirements.txt
   cd airflow
@@ -69,13 +69,13 @@ Please, find the deployed dbt warehouse documentation from [here](https://data-e
 # Screenshots
 ### Airflow & DBT
 Two Dags
-![App Screenshot](./screenshots/DAGs.jpg)
+![App Screenshot](screenshots/DAGs.jpg)
 
 Acyclic Graph representation
-![App Screenshot](./screenshots/Directed%20Asyclic%20Graph.jpg)
+![App Screenshot](screenshots/Directed%20Asyclic%20Graph.jpg)
 
 Dbt tasks with graph
-![App Screenshot](./screenshots/dbt-dags.jpg)
+![App Screenshot](screenshots/dbt-dags.jpg)
 
 DBT docs
 ![App Screenshot](./screenshots/docs.jpg)
@@ -98,7 +98,7 @@ DBT docs
 
 # Authors
 
-- [@Nathnael12](https://www.github.com/nathnael12)
+- [@Nathnael12](https://www.github.com/niyotham)
 
 
 ## Contributing
@@ -109,6 +109,6 @@ Please make sure to update tests as appropriate.
 
 ## Feedback
 
-If you have any feedback, please reach out to me at natnaelmasresha@gmail.com
+
 
 
