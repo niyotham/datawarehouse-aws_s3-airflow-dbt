@@ -37,7 +37,10 @@ def upload_file_to_s3(client, bucket_name, filename, key):
         client.upload_file(Bucket=bucket_name,
                 # Set filename and key
                 Filename=filename, 
-                Key=key)
+                Key=key,
+                #  ExtraArgs = {
+                #     'ACL': 'public-read'}
+                        )
         print(f'file uploaded successfull to {bucket_name} ')
     except Exception as e:
         print(f'File not uploaded because of the {e} error.')
@@ -46,9 +49,10 @@ def upload_file_to_s3(client, bucket_name, filename, key):
 #  create a bucket
 if __name__ == "__main__":
     s3_client = create_s3_client(region_name,aws_access_key_id,aws_secret_access_key)
-    # response_staging= s3_client.create_bucket(Bucket='tham-staging')
-    # response_processed = s3_client.create_bucket(Bucket='tham-processed')
-    # response = s3_client.list_buckets()['Buckets']
+    sns_client=create_sns_client(region_name,aws_access_key_id,aws_secret_access_key)
+    response_staging= s3_client.create_bucket(Bucket='tham-staging')
+    response_processed = s3_client.create_bucket(Bucket='tham-processed')
+    response = s3_client.list_buckets()['Buckets']
     # for bucket in response:
     #     print(bucket['Name'])
     # print(res['Contents'][1]['Key'])
@@ -59,7 +63,7 @@ if __name__ == "__main__":
         # form a key pattem
         name = filename.split('/')[-1].split(".")[0]
         key = f'2024/{name}_01_01.csv'
-        # upload_file_to_s3(s3_client, bucket_name, filename,key)
+        upload_file_to_s3(s3_client, bucket_name, filename,key)
     
         # Get object metadata and print it
         response = s3_client.head_object(Bucket='tham-staging', 
@@ -72,4 +76,3 @@ if __name__ == "__main__":
                         Prefix='2024/')
     for obj in response['Contents']:
         print(obj["Key"])
-            
