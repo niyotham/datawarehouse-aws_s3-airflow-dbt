@@ -1,6 +1,7 @@
 import sys, os
 from dotenv import dotenv_values, load_dotenv
 import boto3
+import pandas as pd
 load_dotenv()
 sys.path.append("../")
 region_name= os.getenv('region_name')
@@ -71,26 +72,77 @@ def subscribe_to(sns, topic_arn,protocol,endpoint ):
         resp_sms_arn= resp_sms['SubscriptionArn']
         # Print the SubscriptionArn
         print(f'Successfull subscribed to {endpoint} with response:  {resp_sms_arn} ')
+        return 
     except Exception as e:
         print( f"Subscription failed because of {e}")
-#  create a bucket
+#  create a bucke(t
+def publish_topic(sns, v_count, topic_patten,service_name):
+    '''
+    - sns: sns client 
+    - streets_v_count: the minimun number ot count to have before publishing
+    - topic_patten: The string in  the TopicArn you want to publish to
+    - service_name: The activities that are concerned
+    '''
+
+    topics = sns.list_topics()['Topics']
+    # look through the 
+    list_topic_arns=[]
+    for topic in topics:
+       topic_arn = topic['TopicArn']
+       list_topic_arns.append(topic_arn)
+    #    print(topic_arn)
+    # If there are over 100 potholes, create a message
+    if v_count > 100:
+        # The message should contain the number of potholes.
+        message = "There are {} {}! Kindly act on this issue as soon as possible".format(v_count, service_name)
+        # The email subject should also contain number of potholes
+        subject = "Latest {} count is {}".format(v_count,service_name)
+        for topc_arn in list_topic_arns:
+            if topic_patten in  topc_arn:
+        # Publish the email to for example streets_critical topic
+                sns.publish(
+                    TopicArn = topc_arn,
+                    # Set subject and message
+                    Message = message,
+                    Subject = subject
+                )
+
+def publish_to_phones(sns,contacts: pd.DataFrame):
+
+    # Loop through every row in contacts
+    for _, row in contacts.iterrows():
+        
+        # Publish an ad-hoc sms to the user's phone number
+        response = sns.publish(
+            # Set the phone number
+            PhoneNumber = str(row['Phone']),
+            # The message should include the user's name
+            Message = 'Hello {}'.format(row['Name'])
+        )
+        return (response)
+
 if __name__ == "__main__":
     sns_client=create_sns_client(region_name,aws_access_key_id,aws_secret_access_key)
     # List only objects that start with '2018/final_'
     topic, topics =create_sns_topic('city_alerts',sns_client)   
-    print(topic,'\n', topics )  
+    # print(topic,'\n', topics )  
     departments = ['trash', 'streets', 'water'] 
-
+    topics = sns_client.list_topics()['Topics']
+    print(topics)
+    for topic in topics:
+       topic_arn = topic['TopicArn']
+       print(topic_arn)
     # get the topics
-    list_topics= create_sns_dep_topic(departments, sns_client)
-
+    
     # subcripbe to critical topics only
+    list_topics= create_sns_dep_topic(departments, sns_client)
     for topic in list_topics:
         topic_arn = topic['TopicArn']
         if "critical" in topic_arn:
         # Subscribe Elena's email to streets_critical topic.
             subscribe_to(sns_client, 
                          topic_arn,
-                         protocol='email',
-                         endpoint='your email'
+                         protocol='',
+                         endpoint=''
                          )
+    
