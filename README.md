@@ -97,7 +97,7 @@ DBT docs
 
 # Authors
 
-- [![niyotham](https://www.github.com/niyotham)
+- [niyotham](https://www.github.com/niyotham)
 
 
 ## Contributing
