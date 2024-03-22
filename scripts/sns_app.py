@@ -63,7 +63,6 @@ def subscribe_to(sns, topic_arn,protocol,endpoint ):
     - topic_arn: The ARN of the topic you want to subscribe to 
     - endpoint: actual phone number or email
     '''
-    #  Subscribe Elena's phone number to streets_critical topic
     try:
         resp_sms = sns.subscribe(
                 TopicArn = topic_arn, 
@@ -72,7 +71,7 @@ def subscribe_to(sns, topic_arn,protocol,endpoint ):
         resp_sms_arn= resp_sms['SubscriptionArn']
         # Print the SubscriptionArn
         print(f'Successfull subscribed to {endpoint} with response:  {resp_sms_arn} ')
-        return 
+        return resp_sms_arn
     except Exception as e:
         print( f"Subscription failed because of {e}")
 #  create a bucke(t
@@ -83,7 +82,6 @@ def publish_topic(sns, v_count, topic_patten,service_name):
     - topic_patten: The string in  the TopicArn you want to publish to
     - service_name: The activities that are concerned
     '''
-
     topics = sns.list_topics()['Topics']
     # look through the 
     list_topic_arns=[]
@@ -93,9 +91,9 @@ def publish_topic(sns, v_count, topic_patten,service_name):
     #    print(topic_arn)
     # If there are over 100 potholes, create a message
     if v_count > 100:
-        # The message should contain the number of potholes.
+        # The message should contain the number of service_name.
         message = "There are {} {}! Kindly act on this issue as soon as possible".format(v_count, service_name)
-        # The email subject should also contain number of potholes
+        # The email subject should also contain number of service_name.
         subject = "Latest {} count is {}".format(v_count,service_name)
         for topc_arn in list_topic_arns:
             if topic_patten in  topc_arn:
@@ -106,8 +104,8 @@ def publish_topic(sns, v_count, topic_patten,service_name):
                     Message = message,
                     Subject = subject
                 )
-
-def publish_to_phones(sns,contacts: pd.DataFrame):
+                print(f'successfull send the message to {topc_arn}')
+def publish_to_phones(sns,contacts: pd.DataFrame, message):
 
     # Loop through every row in contacts
     for _, row in contacts.iterrows():
@@ -117,22 +115,22 @@ def publish_to_phones(sns,contacts: pd.DataFrame):
             # Set the phone number
             PhoneNumber = str(row['Phone']),
             # The message should include the user's name
-            Message = 'Hello {}'.format(row['Name'])
+            Message = f'Dear {row["Name"]}, \n {message}'
         )
         return (response)
 
 if __name__ == "__main__":
     sns_client=create_sns_client(region_name,aws_access_key_id,aws_secret_access_key)
-    # List only objects that start with '2018/final_'
     topic, topics =create_sns_topic('city_alerts',sns_client)   
     # print(topic,'\n', topics )  
     departments = ['trash', 'streets', 'water'] 
     topics = sns_client.list_topics()['Topics']
-    print(topics)
-    for topic in topics:
-       topic_arn = topic['TopicArn']
-       print(topic_arn)
-    # get the topics
+    # print(topics)
+    # for topic in topics:
+    #    topic_arn = topic['TopicArn']
+    #    print(topic_arn)
+
+    # # get the topics
     
     # subcripbe to critical topics only
     list_topics= create_sns_dep_topic(departments, sns_client)
@@ -142,7 +140,7 @@ if __name__ == "__main__":
         # Subscribe Elena's email to streets_critical topic.
             subscribe_to(sns_client, 
                          topic_arn,
-                         protocol='',
-                         endpoint=''
+                         protocol='email',
+                         endpoint='your email'
                          )
-    
+    publish_topic(sns_client, 101, "critical",'pathhole')
