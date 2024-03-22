@@ -1,0 +1,9 @@
+# generate aftet performing these steps
+# pip install pipreqs
+# `pipreqs --encoding=utf8`
+# pipreqs --encoding=utf8 [<path>]
+
+
+boto3==1.34.54
+pandas==1.5.0
+python-dotenv==1.0.1
