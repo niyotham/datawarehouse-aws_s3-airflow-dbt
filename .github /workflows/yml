@@ -1,16 +1,42 @@
+# name: traffic workflow
+# # Controls when the workflow will run
+# on:
+#   # Triggers the workflow on push or pull request events but only for the "main" branch
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+# jobs:
+#   build: 
+#      runs-on: ubuntu-latest
+#      steps:
+#       - uses: actions/checkout@v4
+#       - name: Run  git action
+        run: echo "this action run successfully for this particular action!"
+
 name: traffic workflow
-# Controls when the workflow will run
+
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
+  # Specify the event that will trigger the workflow
   pull_request:
     branches: [ "main" ]
+
 jobs:
-  build: 
-     runs-on: ubuntu-latest
-     steps:
-      - uses: actions/checkout@v4
-      - name: Run  git action
-        run: echo "this action run successfully for this particular action!"
-  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Use checkout action to check out the repository on the runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Setup Python to 3.9 using setup-python action
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version:  3.9
+
+      # Run the hello_world.py python script
+      - name: Run Python script
+        run: |
+          python3 loadfile.py
+          echo "success"
