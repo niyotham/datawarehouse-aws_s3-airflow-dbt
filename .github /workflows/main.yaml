@@ -1,0 +1,10 @@
+name: First workflow 
+on: push
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run a simple git action
+        run: echo "this action run successfully for this particular action!"
